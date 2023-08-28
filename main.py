@@ -27,9 +27,6 @@ def calculate_maximum_interest_rate(monthly_payment, property_term):
 
     return None  # No rate found within the limit
 
-
-    return None  # No rate found within the limit
-
 def calculate_cash_available_per_month(data, stress_test_rate): 
 
     total_housing_costs_without_mortgage = data['average_property_price'] * (data['property_tax_rate'] 
