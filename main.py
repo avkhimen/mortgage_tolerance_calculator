@@ -44,10 +44,10 @@ def calculate_cash_available_per_month(data, stress_test_rate):
 
     total_housing_costs_without_mortgage = data['average_property_price'] * (data['property_tax_rate'] 
                                                                              + data['property_insurance_rate'])/12
-    total_personal_expenses_adults = data['number_of_adults_in_family'] * sum(data['Individual_adults'].values())
-    total_expenses_adults = total_housing_costs_without_mortgage + total_personal_expenses_adults
-    total_expenses_kids = data['number_of_kids_in_family'] * sum(data['Individual_kids'].values())
-    total_expenses_shared = sum(data['Shared'].values())
+    total_personal_expenses_adults = data['number_of_adults_in_family'] * sum(data['Individual_adults'].values()) * stress_test_rate
+    total_expenses_adults = total_housing_costs_without_mortgage + total_personal_expenses_adults * stress_test_rate
+    total_expenses_kids = data['number_of_kids_in_family'] * sum(data['Individual_kids'].values()) * stress_test_rate
+    total_expenses_shared = sum(data['Shared'].values()) * stress_test_rate
     expenses_per_month = total_expenses_adults + total_expenses_kids + total_expenses_shared
     salary_per_month = data['number_of_adults_in_family'] * data['annual_wage'] * data['tax_rate'] / 12
 
