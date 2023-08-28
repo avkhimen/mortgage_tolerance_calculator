@@ -2,6 +2,15 @@ import numpy as np
 import argparse
 import yaml
 
+def calculate_home_price(monthly_payment, term, interest_rate):
+    # Convert annual interest rate to monthly interest rate
+    monthly_interest_rate = interest_rate / 12 / 100
+    
+    # Calculate loan amount using the formula for loan payment
+    loan_amount = (monthly_payment * (1 - (1 + monthly_interest_rate)**(-term))) / monthly_interest_rate
+    
+    return loan_amount
+
 def calculate_highest_interest_rate(available_per_month, property_term):
     # Define the maximum allowable loan amount
     max_loan_amount = available_per_month * property_term
