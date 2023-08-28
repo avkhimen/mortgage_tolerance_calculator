@@ -1,0 +1,1 @@
+python main.py --territory Alberta --stress_test_rate 1
