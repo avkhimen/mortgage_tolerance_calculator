@@ -10,13 +10,31 @@ def calculate_highest_interest_rate(available_per_month, property_term):
     interest_rates = np.linspace(0, 1.0, num=1000)  # 1000 points between 0 and 1
     
     for rate in interest_rates:
+
+        if rate < 1e-10:  # A very small positive value instead of zero
+            continue
+
         # Calculate the loan amount using the formula for loan payment
-        loan_amount = (available_per_month * (1 - (1 + rate)**(-term))) / rate
+        loan_amount = (available_per_month * (1 - (1 + rate)**(-property_term))) / rate
         
         if loan_amount <= max_loan_amount:
             return rate * 100  # Convert to percentage
 
     return None  # No rate found within the limit
+
+def calculate_cash_available_per_month(data, stress_test_rate):
+
+    #available_per_month = salary_per_month - expenses_per_month
+    #salary_per_momth = number_of_adults * annual_wage * tax_rate / 12
+    #expenses_per_month = total_expenses_adults + total_expenses_kids + total_expenses_shared
+    #total_expenses_shared = 
+    #total_expenses_kids = 
+    #total_expenses_adults = total_personal_expenses + total_housing_costs
+    #total_personal_expenses = 
+    #total_housing_costs = 
+
+    available_per_month = 1000
+    return available_per_month
 
 def main():
 
@@ -32,7 +50,14 @@ def main():
     territory = args.territory
     stress_test_rate = args.stress_test_rate
 
+    data = yaml_data[territory]
+
+    available_per_month = calculate_cash_available_per_month(data, stress_test_rate)
+
+    property_term = data['property_term']
+
     maximum_interest_rate = calculate_highest_interest_rate(available_per_month, property_term)
+
     maximum_interest_rate = 10
     print(f'Under the input conditions for {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
 
