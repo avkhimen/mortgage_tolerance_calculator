@@ -81,6 +81,7 @@ def main():
     maximum_home_price = calculate_home_price(available_per_month, property_term, maximum_interest_rate)
 
     #maximum_interest_rate = 10
+    print(f'Under the input conditions for {territory} the disposable income per month is {available_per_month}$')
     print(f'Under the input conditions for {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
     print(f'This also implies the maximum allowable home price of {maximum_home_price}')
 
