@@ -12,7 +12,7 @@ def calculate_home_price(monthly_payment, term, interest_rate):
     
     return loan_amount / 0.8 # Assume 20% downpayment
 
-def calculate_maximum_interest_rate(data,monthly_payment, property_term):
+def calculate_interest_rate(data,monthly_payment, property_term):
     '''
     max_loan_amount = monthly_payment * property_term
     interest_rates = np.linspace(0, 1.0, num=1000)
@@ -29,7 +29,7 @@ def calculate_maximum_interest_rate(data,monthly_payment, property_term):
 
     return None  # No rate found within the limit
     '''
-    return npf.rate(property_term*12, -monthly_payment, data['average_property_price'], 0) * 12
+    return npf.rate(property_term*12, -monthly_payment, data['average_property_price'], 0) * 12 * 100
 
 def calculate_cash_available_per_month(data, stress_test_rate): 
 
@@ -62,19 +62,19 @@ def main():
 
     data = yaml_data[territory]
 
-    available_per_month = calculate_cash_available_per_month(data, stress_test_rate)
+    available_per_month = int(calculate_cash_available_per_month(data, stress_test_rate))
 
     property_term = data['property_term']
 
-    maximum_interest_rate = calculate_maximum_interest_rate(data, available_per_month, property_term)
+    interest_rate = round(calculate_interest_rate(data, available_per_month, property_term),2)
 
-    maximum_home_price = calculate_home_price(available_per_month, property_term, maximum_interest_rate)
+    maximum_home_price = calculate_home_price(available_per_month, property_term, interest_rate)
 
     #maximum_interest_rate = 10
     # Report results
     print(f'For {territory} the disposable income per month is {available_per_month}$')
-    print(f'For {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
-    print(f'For {territory}, the maximum allowable home price is {maximum_home_price}$')
+    print(f'For {territory} the calculated maximum interest rate is {interest_rate}%')
+    #print(f'For {territory}, the maximum allowable home price is {maximum_home_price}$')
 
 if __name__ == '__main__':
     main()
