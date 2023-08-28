@@ -7,40 +7,30 @@ def calculate_home_price(monthly_payment, term, interest_rate):
     monthly_interest_rate = (interest_rate / 12) / 100
     
     # Calculate loan amount using the formula for loan payment
-    loan_amount = (monthly_payment * (1 - (1 + monthly_interest_rate)**(-term))) / monthly_interest_rate
+    loan_amount = int((monthly_payment * (1 - (1 + monthly_interest_rate)**(-term))) / monthly_interest_rate)
     
-    return loan_amount
+    return loan_amount / 0.8 # Assume 20% downpayment
 
-def calculate_highest_interest_rate(available_per_month, property_term):
-    # Define the maximum allowable loan amount
-    max_loan_amount = available_per_month * property_term
-    
-    # Define a list of interest rates to test
-    interest_rates = np.linspace(0, 1.0, num=1000)  # 1000 points between 0 and 1
+def calculate_maximum_interest_rate(monthly_payment, property_term):
+    max_loan_amount = monthly_payment * property_term
+    interest_rates = np.linspace(0, 1.0, num=1000)
     
     for rate in interest_rates:
-
         if rate < 1e-10:  # A very small positive value instead of zero
             continue
-
+        
         # Calculate the loan amount using the formula for loan payment
-        loan_amount = (available_per_month * (1 - (1 + rate)**(-property_term))) / rate
+        loan_amount = (monthly_payment * (1 - (1 + rate)**(-property_term))) / rate
         
         if loan_amount <= max_loan_amount:
             return rate * 100  # Convert to percentage
 
     return None  # No rate found within the limit
 
-def calculate_cash_available_per_month(data, stress_test_rate):
 
-    #available_per_month = salary_per_month - expenses_per_month
-    #salary_per_momth = number_of_adults * annual_wage * tax_rate / 12
-    #expenses_per_month = total_expenses_adults + total_expenses_kids + total_expenses_shared
-    #total_expenses_shared = 
-    #total_expenses_kids = 
-    #total_expenses_adults = total_personal_expenses_adults + total_housing_costs_without_mortgage
-    #total_personal_expenses_adults = 
-    #total_housing_costs = 
+    return None  # No rate found within the limit
+
+def calculate_cash_available_per_month(data, stress_test_rate): 
 
     total_housing_costs_without_mortgage = data['average_property_price'] * (data['property_tax_rate'] 
                                                                              + data['property_insurance_rate'])/12
@@ -66,7 +56,6 @@ def main():
     parser.add_argument("--stress_test_rate", type=float, help="Stress test rate as float [0.5-1.5]")
 
     args = parser.parse_args()
-
     territory = args.territory
     stress_test_rate = args.stress_test_rate
 
@@ -76,14 +65,15 @@ def main():
 
     property_term = data['property_term']
 
-    maximum_interest_rate = calculate_highest_interest_rate(available_per_month, property_term)
+    maximum_interest_rate = calculate_maximum_interest_rate(available_per_month, property_term)
 
     maximum_home_price = calculate_home_price(available_per_month, property_term, maximum_interest_rate)
 
     #maximum_interest_rate = 10
-    print(f'Under the input conditions for {territory} the disposable income per month is {available_per_month}$')
-    print(f'Under the input conditions for {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
-    print(f'This also implies the maximum allowable home price of {maximum_home_price}')
+    # Report results
+    print(f'For {territory} the disposable income per month is {available_per_month}$')
+    print(f'For {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
+    print(f'For {territory}, the maximum allowable home price is {maximum_home_price}$')
 
 if __name__ == '__main__':
     main()
