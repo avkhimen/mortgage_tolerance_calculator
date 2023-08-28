@@ -4,7 +4,7 @@ import yaml
 
 def calculate_home_price(monthly_payment, term, interest_rate):
     # Convert annual interest rate to monthly interest rate
-    monthly_interest_rate = interest_rate / 12 / 100
+    monthly_interest_rate = (interest_rate / 12) / 100
     
     # Calculate loan amount using the formula for loan payment
     loan_amount = (monthly_payment * (1 - (1 + monthly_interest_rate)**(-term))) / monthly_interest_rate
@@ -38,11 +38,22 @@ def calculate_cash_available_per_month(data, stress_test_rate):
     #expenses_per_month = total_expenses_adults + total_expenses_kids + total_expenses_shared
     #total_expenses_shared = 
     #total_expenses_kids = 
-    #total_expenses_adults = total_personal_expenses + total_housing_costs
-    #total_personal_expenses = 
+    #total_expenses_adults = total_personal_expenses_adults + total_housing_costs_without_mortgage
+    #total_personal_expenses_adults = 
     #total_housing_costs = 
 
-    available_per_month = 1000
+    total_housing_costs_without_mortgage = data['average_property_price'] * (data['property_tax_rate'] 
+                                                                             + data['property_insurance_rate'])/12
+    total_personal_expenses_adults = data['number_of_adults_in_family'] * sum(data['Individual_adults'].values())
+    total_expenses_adults = total_housing_costs_without_mortgage + total_personal_expenses_adults
+    total_expenses_kids = data['number_of_kids_in_family'] * sum(data['Individual_kids'].values())
+    total_expenses_shared = sum(data['Shared'].values())
+    expenses_per_month = total_expenses_adults + total_expenses_kids + total_expenses_shared
+    salary_per_month = data['number_of_adults_in_family'] * data['annual_wage'] * data['tax_rate'] / 12
+
+    available_per_month = salary_per_month - expenses_per_month
+
+    #available_per_month = 1000
     return available_per_month
 
 def main():
@@ -67,8 +78,11 @@ def main():
 
     maximum_interest_rate = calculate_highest_interest_rate(available_per_month, property_term)
 
-    maximum_interest_rate = 10
+    maximum_home_price = calculate_home_price(available_per_month, property_term, maximum_interest_rate)
+
+    #maximum_interest_rate = 10
     print(f'Under the input conditions for {territory} the maximum calculated interest rate is {maximum_interest_rate}%')
+    print(f'This also implies the maximum allowable home price of {maximum_home_price}')
 
 if __name__ == '__main__':
     main()
