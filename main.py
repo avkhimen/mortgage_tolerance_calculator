@@ -1,4 +1,5 @@
 import numpy as np
+import numpy_financial as npf
 import argparse
 import yaml
 
@@ -11,7 +12,8 @@ def calculate_home_price(monthly_payment, term, interest_rate):
     
     return loan_amount / 0.8 # Assume 20% downpayment
 
-def calculate_maximum_interest_rate(monthly_payment, property_term):
+def calculate_maximum_interest_rate(data,monthly_payment, property_term):
+    '''
     max_loan_amount = monthly_payment * property_term
     interest_rates = np.linspace(0, 1.0, num=1000)
     
@@ -26,6 +28,8 @@ def calculate_maximum_interest_rate(monthly_payment, property_term):
             return rate * 100  # Convert to percentage
 
     return None  # No rate found within the limit
+    '''
+    return npf.rate(property_term*12, -monthly_payment, data['average_property_price'], 0) * 12
 
 def calculate_cash_available_per_month(data, stress_test_rate): 
 
@@ -62,7 +66,7 @@ def main():
 
     property_term = data['property_term']
 
-    maximum_interest_rate = calculate_maximum_interest_rate(available_per_month, property_term)
+    maximum_interest_rate = calculate_maximum_interest_rate(data, available_per_month, property_term)
 
     maximum_home_price = calculate_home_price(available_per_month, property_term, maximum_interest_rate)
 
