@@ -49,6 +49,11 @@ def main():
     # Calc interest rate
     interest_rate = round(calculate_interest_rate(data, available_per_month, property_term),2)
 
+    # Iterate over salary bands here
+
+    # Plot results here
+    # plt.show()
+
     # Report results
     print(f'For {territory} the disposable income per month is {available_per_month}$')
     print(f'For {territory} the calculated maximum interest rate is {interest_rate}%')
