@@ -1,6 +1,7 @@
 import numpy_financial as npf
 import argparse
 import yaml
+import matplotlib.pyplot as plt
 
 def calculate_interest_rate(data,monthly_payment, property_term):
     '''Calculates interest rate from term, payment, and mortage amount'''
