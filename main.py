@@ -40,6 +40,9 @@ def main():
     # Get data for territory
     data = yaml_data[territory]
 
+    interest_rates = []
+    # All below code in a loop over the income brackets
+
     # Calc available cash per month
     available_per_month = int(calculate_cash_available_per_month(data, stress_test_rate))
 
@@ -57,6 +60,8 @@ def main():
     # Report results
     print(f'For {territory} the disposable income per month is {available_per_month}$')
     print(f'For {territory} the calculated maximum interest rate is {interest_rate}%')
+
+    # Come out of loop here to display graph
 
 if __name__ == '__main__':
     main()
