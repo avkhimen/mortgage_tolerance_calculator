@@ -41,6 +41,7 @@ def main():
     data = yaml_data[territory]
 
     interest_rates = []
+    income_brackets = data['annual_wage']
     # All below code in a loop over the income brackets
 
     # Calc available cash per month
@@ -62,6 +63,11 @@ def main():
     print(f'For {territory} the calculated maximum interest rate is {interest_rate}%')
 
     # Come out of loop here to display graph
+    plt.plot(x=income_brackets, y = interest_rates)
+    plt.xlabel('Top of Income Bracket [$]')
+    plt.ylabel('Interest Rate [%]')
+    plt.title('Interest Rate [%] vs Top of Income Bracket [$]')
+    plt.show()
 
 if __name__ == '__main__':
     main()
